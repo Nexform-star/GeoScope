@@ -1,4 +1,5 @@
 import requests
+import folium
 
 menu = """
 ================================
@@ -30,11 +31,11 @@ if select == 1:
         url_json = url.json()
         display_name = url_json["display_name"]
         adresse = url_json["address"]["road"]
-        county = url_json["address"]["county"]
+        county = url_json["address"].get("county")
         state = url_json["address"]["state"]
         postcode = url_json["address"]["postcode"]
         country = url_json["address"]["country"]
-        city = url_json["address"]["city"]
+        city = url_json["address"].get("city")
         lat = url_json["lat"]
         lon = url_json["lon"]
         addresstype = url_json["addresstype"]
@@ -46,6 +47,16 @@ if select == 1:
         print(f"Longitude : {lon}, Latitude : {lat}")
         print(f"Address type : {addresstype}")
         print(f"Display name : {display_name}")
+        m = folium.Map(location=(lat, lon))
+        folium.Marker(
+            location=[lat, lon],
+            tooltip="Click me!",
+            popup=display_name,
+            icon=folium.Icon(icon="cloud"),
+        ).add_to(m)
+        m
+        m.save("output/index.html")
+        print("Location save in index.html in output")
 
     if select1 == 2:
         adresse = input("Enter an address: ")
@@ -63,6 +74,16 @@ if select == 1:
             print(f"Latitude : {lat}")
             print(f"Longitude : {lon}")
             print(f"Bounding box: {boundingbox}")
+            m = folium.Map(location=(lat, lon))
+            folium.Marker(
+                location=[lat, lon],
+                tooltip="Click me!",
+                popup=display_name,
+                icon=folium.Icon(icon="cloud"),
+            ).add_to(m)
+            m
+            m.save("output/index.html")
+            print("Location save in index.html in output")
             if name == "":
                 print(f"Name: {adresse}")
             else:
